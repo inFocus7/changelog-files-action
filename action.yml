@@ -1,4 +1,7 @@
 name: 'YAML-to-Markdown Changelog Generator'
+branding:
+  icon: 'file-text'
+  color: 'blue'
 description: 'Generates a changelog for a release based on a YAML file'
 inputs:
   changelog-directory:
