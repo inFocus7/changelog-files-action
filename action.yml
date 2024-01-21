@@ -1,0 +1,26 @@
+name: 'Changelog Generator'
+description: 'Generates a changelog for a release based on a YAML file'
+inputs:
+  changelog-directory:
+    description: "The directory where the changelog files are stored. Do not include a trailing slash."
+    required: true
+    default: "changelog"
+  release-tag-name:
+    description: "The version of the release"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Setup yq
+      uses: mikefarah/yq@v2
+    - name: Generate changelog
+      id: generate_changelog
+      run: |
+        sh ./scripts/generate-changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}"
+      shell: bash
+outputs:
+  changelog:
+    description: 'Generated changelog content'
+    value: ${{ steps.generate_changelog.outputs.changelog }}
