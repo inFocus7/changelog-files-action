@@ -14,7 +14,7 @@ runs:
     - name: Generate changelog
       id: generate_changelog
       run: |
-        sh ${{ github.action_path }}/scripts/generate-changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}"
+        sh ${{ github.action_path }}/scripts/generate_changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}"
       shell: bash
 outputs:
   changelog:
