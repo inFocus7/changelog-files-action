@@ -14,10 +14,10 @@ runs:
     - name: Generate changelog
       id: generate_changelog
       run: |
-        changelog_output=$(sh ${{ github.action_path }}/scripts/generate_changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}")
-        echo "::set-output name=changelog::$changelog_output"
+        sh ${{ github.action_path }}/scripts/generate_changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}" > changelog_output.md
       shell: bash
-outputs:
-  changelog:
-    description: 'Generated changelog content'
-    value: ${{ steps.generate_changelog.outputs.changelog }}
+    - name: Upload changelog as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: changelog
+        path: changelog_output.md

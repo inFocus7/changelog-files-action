@@ -10,10 +10,6 @@ When a release tagged `TAG` is created, this action will generate a changelog ba
 | changelog-directory | The directory where changelog files are stored. Do not include a trailing slash | `changelogs`  |
 | release-tag-name    | The name of the release tag.                                                    | None.         |
 
-| Output      | Description                     |
-|-------------|---------------------------------|
-| changelog   | The generated changelog string. |
-
 The changelog files to generate from should follow the following format:
 ```yaml
 fix: <[]str>
