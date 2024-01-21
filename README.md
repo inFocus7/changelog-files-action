@@ -25,7 +25,7 @@ ci: <[]str>
 
 ## Example Usages
 
-### Use Case: Default usage
+### Use Case: Updating the Changelog On Release
 ```yaml
 on:
   release:
