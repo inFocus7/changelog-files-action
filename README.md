@@ -10,6 +10,8 @@ When a release tagged `TAG` is created, this action will generate a changelog ba
 | changelog-directory | The directory where changelog files are stored. Do not include a trailing slash | `changelogs`  |
 | release-tag-name    | The name of the release tag.                                                    | None.         |
 
+This action outputs the generated changelog to an artifact named `changelog_output.md`.
+
 The changelog files to generate from should follow the following format:
 ```yaml
 fix: <[]str>
@@ -36,21 +38,25 @@ jobs:
       - uses: actions/checkout@v2
       - name: Generate Changelog
         id: changelog
-        uses: infocus7/changelog-files-action@v1
+        uses: infocus7/changelog-files-action@latest # You can also use a specific version or hash.
         with:
-          changelog-directory: 'path/to/changelogs'
+          changelog-directory: 'changelogs-fun'
           release-tag-name: ${{ github.ref_name }}
-      - name: Update Release Notes
-        uses: actions/github-script@v3
+      - name: Download Changelog # This is needed because the action outputs the changelog to an artifact (file).
+        uses: actions/download-artifact@v2
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            const releaseId = ${{ github.event.release.id }};
-            const changelog = ${{ steps.changelog.outputs.changelog }};
-            github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: releaseId,
-              body: changelog
-            });
+          name: changelog
+      - name: Update Release Notes
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_NAME: ${{ github.repository }}
+          RELEASE_ID: ${{ github.event.release.id }}
+        run: |
+          changelog_content=$(jq -Rs . < changelog_output.md) # Convert the changelog to a JSON string so we can send it.
+          curl -L -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            "https://api.github.com/repos/$REPO_NAME/releases/$RELEASE_ID" \
+            -d "{\"body\": $changelog_content}"
 ```
