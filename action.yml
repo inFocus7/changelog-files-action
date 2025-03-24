@@ -20,7 +20,7 @@ runs:
         sh ${{ github.action_path }}/scripts/generate_changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}" > changelog_output.md
       shell: bash
     - name: Upload changelog as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: changelog
         path: changelog_output.md
