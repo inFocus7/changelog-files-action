@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Check if the correct number of arguments is passed
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <changelog-directory> <release-tag-name>"
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 <changelog-directory> <release-tag-name> <hide-title>"
     exit 1
 fi
 
@@ -74,7 +74,7 @@ elif [[ $VERSION_TAG == *.yaml ]]; then
 fi
 
 
-if [ -z "$HIDE_TITLE" ]; then
+if [ "$HIDE_TITLE" != "true" ]; then
     echo "# $VERSION_TAG Changelog\n"
 fi
 # Parse each section
