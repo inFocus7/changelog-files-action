@@ -11,13 +11,17 @@ inputs:
   release-tag-name:
     description: "The version of the release"
     required: true
+  hide-title:
+    description: "Whether to hide the title of the changelog"
+    required: false
+    default: "false"
 runs:
   using: "composite"
   steps:
     - name: Generate changelog
       id: generate_changelog
       run: |
-        sh ${{ github.action_path }}/scripts/generate_changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}" > changelog_output.md
+        sh ${{ github.action_path }}/scripts/generate_changelog.sh "${{ inputs.changelog-directory }}" "${{ inputs.release-tag-name }}" "${{ inputs.hide-title }}" > changelog_output.md
       shell: bash
     - name: Upload changelog as artifact
       uses: actions/upload-artifact@v4
